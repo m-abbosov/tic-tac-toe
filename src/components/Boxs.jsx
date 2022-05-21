@@ -1,23 +1,38 @@
 import React from "react";
 import { useState } from "react";
 import styled from "styled-components";
-
+import "antd/dist/antd.min.css";
 import { ReactComponent as CloseIcon } from "../images/close.svg";
 import { ReactComponent as CircleIcon } from "../images/circle.svg";
-import { Button, Modal } from "react-bootstrap";
+import { Modal } from "antd";
 
 const Boxs = () => {
   const [turn, setTurn] = useState("x");
   const [cells, setCells] = useState(Array(9).fill(""));
+
   const [winner, setWinner] = useState();
   const [winnerBox, setWinnerBox] = useState([]);
-  const [show, setShow] = useState(false);
 
-  const handleClose = () => {
-    setShow(false);
-    handleRestart();
+  const [visible, setVisible] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+
+  const showModal = () => {
+    setVisible(true);
   };
-  const handleShow = () => setShow(true);
+
+  const handleOk = () => {
+    setConfirmLoading(true);
+    setTimeout(() => {
+      setVisible(false);
+      setConfirmLoading(false);
+      handleRestart();
+    }, 2000);
+  };
+
+  const handleCancel = () => {
+    handleRestart();
+    setVisible(false);
+  };
 
   const checkForWinner = (squares) => {
     let combos = {
@@ -52,7 +67,7 @@ const Boxs = () => {
           setWinnerBox(pattern);
 
           setTimeout(() => {
-            handleShow();
+            showModal();
           }, 4000);
         }
       });
@@ -100,6 +115,7 @@ const Boxs = () => {
       </div>
     );
   };
+
   return (
     <>
       <Wrapper>
@@ -116,25 +132,24 @@ const Boxs = () => {
         <Box num={8} />
       </Wrapper>
 
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>
+      <Modal
+        title={
+          <p>
             {winner === "x" ? <CloseIcon className="winner" /> : <CircleIcon />}
             is the winner!
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="d-flex align-items-center">
-          <img
-            src="https://media0.giphy.com/media/lZTvTGEGKU6gnQ2wBr/giphy.gif"
-            alt=""
-            className="winner-gif"
-          />
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="primary" onClick={handleClose}>
-            Play Again
-          </Button>
-        </Modal.Footer>
+          </p>
+        }
+        visible={visible}
+        onOk={handleOk}
+        confirmLoading={confirmLoading}
+        onCancel={handleCancel}
+        okText="Play again"
+      >
+        <img
+          src="https://media0.giphy.com/media/lZTvTGEGKU6gnQ2wBr/giphy.gif"
+          alt=""
+          className="winner-gif"
+        />
       </Modal>
     </>
   );
