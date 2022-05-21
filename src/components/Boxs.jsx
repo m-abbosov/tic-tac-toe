@@ -4,7 +4,7 @@ import styled from "styled-components";
 import "antd/dist/antd.min.css";
 import { ReactComponent as CloseIcon } from "../images/close.svg";
 import { ReactComponent as CircleIcon } from "../images/circle.svg";
-import { Modal, Row, Col } from "antd";
+import { Modal, Space } from "antd";
 
 const Boxs = () => {
   const [turn, setTurn] = useState("x");
@@ -134,16 +134,16 @@ const Boxs = () => {
 
       <Modal
         title={
-          <Row align={"middle"}>
-            <Col span={4}>
+          <Space size={"small"} align="center">
+            <div>
               {winner === "x" ? (
                 <CloseIcon className="winner" />
               ) : (
                 <CircleIcon />
               )}
-            </Col>
-            <Col span={12}>is the winner!</Col>
-          </Row>
+            </div>
+            <p>is the winner!</p>
+          </Space>
         }
         visible={visible}
         onOk={handleOk}
