@@ -68,7 +68,7 @@ const Boxs = () => {
 
           setTimeout(() => {
             showModal();
-          }, 4000);
+          }, 200);
         }
       });
     }
